@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens (from Token Board) ─── */
+@theme {
+  /* Palette */
+  --color-espresso: #1E1714;
+  --color-clay: #2B2421;
+  --color-cobalt: #2F43CE;
+  --color-indigo: #242A66;
+  --color-mesh: #EDE8DF;
+  --color-peach: #E6B58E;
+  --color-input-bg: #241D1A;
+  --color-muted: #B0A69C;
+  --color-dim: #9A8F85;
+  --color-faint: #7E756C;
+  --color-code-blue: #9FB0FF;
+  --color-code-blue-light: #C9D2FF;
+  --color-copied-bg: #2B4A33;
+  --color-copied-text: #9FE6B4;
+  --color-mascot-bg: #141019;
+  --color-btn-disabled: #39424F;
+
+  /* Fonts */
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-body: var(--font-hanken), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  /* Animations */
+  --animate-floaty: floaty 5s ease-in-out infinite;
+  --animate-squeeze: squeeze 4.2s ease-in-out both;
+  --animate-pop: pop 4.2s ease-in-out both;
+  --animate-riseup: riseup 0.4s ease both;
+  --animate-popin: popin 0.5s cubic-bezier(0.5, 1.6, 0.4, 1) both;
+}
+
+/* ─── Keyframes ─── */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes squeeze {
+  0%, 12% { transform: scaleX(1); opacity: 1; letter-spacing: 0; }
+  40% { transform: scaleX(0.12); opacity: 0; letter-spacing: -0.18em; }
+  44%, 100% { transform: scaleX(0.12); opacity: 0; }
+}
+
+@keyframes squeezeFast {
+  0% { transform: scaleX(1); opacity: 1; letter-spacing: 0; }
+  100% { transform: scaleX(0.05); opacity: 0; letter-spacing: -0.2em; }
+}
+
+@keyframes pop {
+  0%, 40% { transform: scale(0.6); opacity: 0; }
+  52% { transform: scale(1.06); opacity: 1; }
+  60%, 92% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes riseup {
+  0% { transform: translateY(14px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes popin {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Base ─── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  ::selection {
+    background: #2F43CE;
+    color: #fff;
+  }
+
+  input::placeholder {
+    color: #7E756C;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #7E8BF2;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  body {
+    background: #1E1714;
+    color: #EDE8DF;
+    font-family: var(--font-body);
+  }
+}
