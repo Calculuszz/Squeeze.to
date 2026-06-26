@@ -5,20 +5,21 @@ import MascotAvatar from "./MascotAvatar";
 
 interface ResultCardProps {
   shortCode: string;
+  shortUrl: string;
   onReset: () => void;
 }
 
-export default function ResultCard({ shortCode, onReset }: ResultCardProps) {
+export default function ResultCard({ shortCode, shortUrl, onReset }: ResultCardProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(() => {
-    const txt = `squeeze.to/${shortCode}`;
+    const txt = shortUrl || `squeeze.to/${shortCode}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(txt).catch(() => {});
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
-  }, [shortCode]);
+  }, [shortCode, shortUrl]);
 
   return (
     <div className="w-full flex flex-col items-center animate-riseup">
@@ -43,8 +44,8 @@ export default function ResultCard({ shortCode, onReset }: ResultCardProps) {
             background: copied ? "#2B4A33" : "#2F43CE",
             color: copied ? "#9FE6B4" : "#fff",
             boxShadow: copied
-              ? "none"
-              : "0 8px 20px -10px rgba(47,67,206,0.9)",
+            ? "none"
+            : "0 8px 20px -10px rgba(47,67,206,0.9)",
           }}
         >
           {copied ? "Copied" : "Copy"}

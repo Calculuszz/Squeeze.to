@@ -34,6 +34,7 @@ export default function Home() {
   const [errorMsg, setErrorMsg] = useState("");
   const [longUrlDisplay, setLongUrlDisplay] = useState("");
   const [shortCode, setShortCode] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
   const squeezeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -66,6 +67,7 @@ export default function Home() {
     try {
       const result = await shortenUrl(norm);
       setShortCode(result.shortCode);
+      setShortUrl(result.shortUrl);
 
       // Check reduced motion preference
       const reduceMotion =
@@ -95,6 +97,7 @@ export default function Home() {
     if (squeezeTimer.current) clearTimeout(squeezeTimer.current);
     setPhase("idle");
     setUrl("");
+    setShortUrl("");
     setHasError(false);
   }, []);
 
@@ -157,7 +160,7 @@ export default function Home() {
             )}
 
             {phase === "result" && (
-              <ResultCard shortCode={shortCode} onReset={handleReset} />
+              <ResultCard shortCode={shortCode} shortUrl={shortUrl} onReset={handleReset} />
             )}
           </div>
         </main>
