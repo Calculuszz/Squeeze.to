@@ -25,11 +25,15 @@ export class LinksService {
    * Two round-trips is acceptable per CLAUDE.md.
    */
   async create(longUrl: string) {
+    // Unique placeholder to avoid UNIQUE constraint collision on concurrent inserts.
+    // A static value like '__pending__' would fail if two requests hit at the same time.
+    const placeholder = `_p_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
     // Step 1: Insert with placeholder to obtain the auto-increment id
     const { data: inserted, error: insertError } = await this.supabase
       .getClient()
       .from('links')
-      .insert({ long_url: longUrl, short_code: '__pending__' })
+      .insert({ long_url: longUrl, short_code: placeholder })
       .select('id')
       .single();
 

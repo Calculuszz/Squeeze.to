@@ -2,6 +2,8 @@
 -- Matches the data model defined in CLAUDE.md
 
 CREATE TABLE IF NOT EXISTS links (
+  -- id: ใช้ GENERATED ALWAYS AS IDENTITY (มาตรฐาน ANSI SQL) แทน BIGSERIAL (แบบเก่า)
+  -- ข้อดี: ป้องกันการใส่ค่า id ตรงๆ ช่วยไม่ให้เลข Sequence คลาดเคลื่อน และมีความปลอดภัยสูงกว่า
   id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   short_code    varchar UNIQUE NOT NULL,
   long_url      text NOT NULL,
