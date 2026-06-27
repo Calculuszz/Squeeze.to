@@ -5,14 +5,22 @@ import {
   HttpStatus,
   Param,
   Post,
-  Redirect,
   Res,
 } from '@nestjs/common';
-import type { Response } from 'express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiExcludeEndpoint,
+} from '@nestjs/swagger';
 import { LinksService } from './links.service';
 import { ClickService } from './click.service';
 import { CreateLinkDto } from './dto/create-link.dto';
+import { ShortenResponseDto } from './dto/shorten-response.dto';
+import { StatsResponseDto } from './dto/stats-response.dto';
 
+@ApiTags('Links')
 @Controller()
 export class LinksController {
   constructor(
@@ -24,6 +32,18 @@ export class LinksController {
    * POST /links — Create a short link
    */
   @Post('links')
+  @ApiOperation({
+    summary: 'Shorten a URL',
+    description:
+      'Accepts a long URL and returns a base62-encoded short code with the full short URL.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Link shortened successfully',
+    type: ShortenResponseDto,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid URL format' })
+  @ApiResponse({ status: 500, description: 'Database error' })
   async create(@Body() dto: CreateLinkDto) {
     return this.linksService.create(dto.url);
   }
@@ -32,6 +52,22 @@ export class LinksController {
    * GET /links/:code/stats — Get click stats for a short code
    */
   @Get('links/:code/stats')
+  @ApiOperation({
+    summary: 'Get link statistics',
+    description:
+      'Returns click count, original URL, and creation date for a given short code.',
+  })
+  @ApiParam({
+    name: 'code',
+    example: 'a4Bk9',
+    description: 'The base62 short code',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Stats retrieved successfully',
+    type: StatsResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Short code not found' })
   async stats(@Param('code') code: string) {
     return this.linksService.getStats(code);
   }
@@ -44,6 +80,7 @@ export class LinksController {
    * the click counter. A lost click is acceptable.
    */
   @Get(':code')
+  @ApiExcludeEndpoint()
   async redirect(
     @Param('code') code: string,
     @Res() res: import('express').Response,
@@ -57,3 +94,4 @@ export class LinksController {
     res.redirect(HttpStatus.FOUND, longUrl);
   }
 }
+
